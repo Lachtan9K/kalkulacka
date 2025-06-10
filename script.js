@@ -1,3 +1,4 @@
+//Načtení HTML prvků
 const inputDisplay = document.getElementById('calculator-input');
 const outputDisplay = document.getElementById('calculator-output');
 const buttons = document.querySelectorAll('.calculator-buttons button');
@@ -5,10 +6,15 @@ const historyDisplay = document.getElementById('history-display');
 const clearAllBtn = document.getElementById('clear-all-btn');
 const clearHistoryBtn = document.getElementById('clear-history-btn');
 
+
+//Proměnné let
 let currentInput = '';
 let lastResult = null; // ukládá poslední výsledek
 
-// Funkce pro nahrazení exponentu ^ za Math.pow a vyhodnocení
+// Funkce pro nahrazení exponentu ^ za Math.pow a vyhodnocení. 
+// JavaScript nezná ^ jako "umocni", ale jako bitový operátor. 
+// Proto se a^b musí nahradit za Math.pow(a, b).
+
 function evaluateExpression(expr) {
   const expRegex = /(\d+\.?\d*|\([^\)]+\))\^(\d+\.?\d*|\([^\)]+\))/;
 
@@ -23,18 +29,20 @@ function evaluateExpression(expr) {
   }
 }
 
+//Vždy bude nula na obrazovkách i po smazání výsledků. Aktualizace displejů.
 function updateDisplays() {
   inputDisplay.textContent = currentInput || '0';
   outputDisplay.textContent = lastResult !== null ? lastResult : '0';
 }
 
+//Přidávání výpočtů do historie.
 function addToHistory(expression, result) {
   const div = document.createElement('div');
   div.textContent = `${expression} = ${result}`;
   historyDisplay.prepend(div);
 }
 
-// Zpracování tlačítek
+// Zpracování tlačítek, reakce.
 buttons.forEach(button => {
   button.addEventListener('click', () => {
     const val = button.value;
@@ -48,16 +56,22 @@ buttons.forEach(button => {
       addToHistory(currentInput, result);
       // NEZMĚŇUJ currentInput, nech jej v původním stavu
       updateDisplays();
-    } else if (id === 'clear-btn') {
-      // Vymazat poslední znak (C)
+    } 
+    
+    else if (id === 'clear-btn') {
+      // Vymaže poslední napsaný znak (C)
       currentInput = currentInput.slice(0, -1);
       updateDisplays();
-    } else if (id === 'clear-all-btn') {
-      // Vymazat vše (CE)
+    } 
+    
+    else if (id === 'clear-all-btn') {
+      // Vymazat vše ze vstupy i z výstupu (CE)
       currentInput = '';
       lastResult = null;
       updateDisplays();
-    } else {
+    } 
+    
+    else {
       // Přidat znak
       currentInput += val;
       updateDisplays();
@@ -65,10 +79,10 @@ buttons.forEach(button => {
   });
 });
 
-// Vymazat historii
+//Výmaz historie
 clearHistoryBtn.addEventListener('click', () => {
   historyDisplay.innerHTML = '';
 });
 
-// Inicializace displeje
+// Inicializace displeje, Vždy bude NULA.
 updateDisplays();
